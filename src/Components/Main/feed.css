@@ -1,0 +1,107 @@
+.singlePost {
+  margin: 70px 0;
+}
+.feed {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+}
+.likes {
+  display: flex;
+
+  width: 30px;
+  align-items: center;
+  cursor: pointer;
+}
+.likeDiv {
+  display: flex;
+  align-items: center;
+}
+.likeNumb {
+  cursor: pointer;
+}
+.img {
+  cursor: pointer;
+  object-fit: contain;
+}
+.img > img {
+  width: 380px;
+  height: 458px;
+  object-fit: contain;
+  background-color: rgb(252, 216, 17);
+  border-radius: 20px;
+  border: solid;
+  border-color: rgb(252, 216, 17);
+}
+.profile {
+  font-size: 25px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-weight: 700;
+  text-decoration: underline;
+  font-style: oblique;
+  margin-bottom: 15px;
+  color: rgba(120, 7, 248, 0.925);
+}
+.completePost {
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(252, 216, 17);
+  border-radius: 20px;
+}
+.description {
+  font-style: italic;
+  margin-bottom: 5px;
+  font-weight: 700;
+  color: rgba(119, 7, 248, 0.925);
+}
+.deleteIcon {
+  background-color: transparent;
+  font-size: small;
+  cursor: pointer;
+}
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.singleComment {
+  display: flex;
+  align-items: center;
+  max-width: 150px;
+  margin: 3px 0;
+}
+.commentsAndLikes {
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+  width: 350px;
+}
+.completeLike {
+  display: flex;
+  flex-direction: column;
+}
+.inputForm {
+  max-width: 200px;
+  margin-bottom: 5px;
+}
+.inputForm > button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.inputForm > input {
+  width: 120px;
+}
+.commentTitle {
+  display: flex;
+  align-items: center;
+}
