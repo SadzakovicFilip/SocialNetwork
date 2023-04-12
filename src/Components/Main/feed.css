@@ -8,7 +8,6 @@
   align-items: center;
   margin: 0;
 }
-
 .comment {
   display: flex;
   flex-direction: column;
@@ -72,6 +71,7 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+  color: black;
 }
 .singleComment {
   display: flex;
@@ -97,6 +97,7 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+  color: black;
 }
 .inputForm > input {
   width: 120px;
