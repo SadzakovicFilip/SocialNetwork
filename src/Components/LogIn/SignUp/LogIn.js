@@ -1,6 +1,8 @@
 import React from "react";
 import { useContext, useState } from "react";
 
+import { useForm } from "react-hook-form";
+
 import "./logIn.css";
 
 import { useNavigate } from "react-router-dom";
@@ -10,26 +12,29 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { AuthContext } from "../../Context/AuthContext";
 
 function LogIn() {
-  const [logInData, setLogInData] = useState({ email: "", password: "" });
   const [error, setError] = useState(false);
   const { dispatch } = useContext(AuthContext);
 
-  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
     const auth = getAuth();
-
-    signInWithEmailAndPassword(auth, logInData.email, logInData.password)
+    signInWithEmailAndPassword(auth, data.eMail, data.password)
       .then((userCredential) => {
         const user = userCredential.user;
         dispatch({ type: `LOGIN`, payload: user });
         navigate("/feed");
       })
       .catch((error) => {
-        setError(true);
+        setError(error.message);
       });
   };
+
+  const navigate = useNavigate();
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -37,30 +42,34 @@ function LogIn() {
   };
   return (
     <div className="logInDiv">
-      <form onSubmit={handleSubmit} className="logIn">
+      <form onSubmit={handleSubmit(onSubmit)} className="logIn">
         <input
           type="email"
-          onChange={(e) =>
-            setLogInData((prev) => ({ ...prev, email: e.target.value }))
-          }
-          required
-          placeholder="E-mail"
+          {...register(`eMail`, {
+            required: {
+              value: true,
+              message: `E-mail is required !`,
+            },
+          })}
+          placeholder={errors.eMail ? errors.eMail.message : `E-mail`}
         />
         <input
           type="password"
-          onChange={(e) =>
-            setLogInData((prev) => ({ ...prev, password: e.target.value }))
-          }
-          required
-          placeholder="Password"
+          {...register(`password`, {
+            required: {
+              value: true,
+              message: `Password is required !`,
+            },
+          })}
+          placeholder={errors.password ? errors.password.message : `Password`}
         />
         <div className="buttons">
           <button>Log In</button>
           <button onClick={handleSignUp}>SignUp</button>
         </div>
         {error && (
-          <span style={{ color: `red`, marginTop: `10px` }}>
-            Wrong Passwrod or Email !
+          <span style={{ color: `white`, marginTop: `10px`, fontWeight: "700" }}>
+            {error.slice(9, error.length)}
           </span>
         )}
       </form>
