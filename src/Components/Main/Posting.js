@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { v4 } from "uuid";
 
 import { db } from "../firebase/firebase-config";
@@ -39,7 +40,8 @@ function Posting() {
     if(fileState==false) return 
 
     const date = new Date().toString();
-    const imageRef = ref(storage, `images/${v4()}`);
+    const imgId = v4()
+    const imageRef = ref(storage, `images/${imgId}`);
 
     await uploadBytes(imageRef, fileState);
 
@@ -55,6 +57,7 @@ function Posting() {
       profile: `${profile.firstName} ${profile.lastName}`,
       likeList: false,
       commentList: false,
+      imagesId: imgId
     });
     setAdd((prev) => prev + 1);
     navigate(`/feed`);
