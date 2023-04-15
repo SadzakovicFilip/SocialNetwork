@@ -1,9 +1,9 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-
 import { useContext, useState } from "react";
 
 import { doc, updateDoc } from "firebase/firestore";
+
+import { useParams } from "react-router-dom";
 
 import { PostsContext } from "../Context/context";
 
@@ -20,12 +20,9 @@ import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
 
 function PickedProfile() {
-  const { profileID } = useParams();
-  console.log(profileID);
-  const { posts, profile, setAdd } = useContext(PostsContext);
-
-
   const [commentar, setComment] = useState(``);
+  const { posts, profile, setAdd } = useContext(PostsContext);
+  const { profileID } = useParams();
 
 
   const handleLike = async (id) => {
@@ -207,7 +204,7 @@ function PickedProfile() {
 
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className="myProfile">{profilePosts}</div>
     </div>
   );

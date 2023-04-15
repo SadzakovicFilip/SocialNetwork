@@ -91,11 +91,17 @@ function Feed() {
     setAdd((prev) => prev + 1);
   };
 
+  const deletePost = () => {
+    console.log(`deletedPost`);
+  };
+
   const feed = posts.map((post, key) => {
     let isLiked = post.likes.find((item) => profile?.id == item.id);
     return (
       <div className="completePost" key={key}>
-        <div className="profile"><Link to={`/myprofile/${post.uid}`}>{post.profile}</Link></div>
+        <div className="profile">
+          <Link to={`/myprofile/${post.uid}`}>{post.profile}</Link>
+        </div>
         <div className="img" onDoubleClick={() => handleLike(post.id)}>
           <img src={post.url} alt="post" />{" "}
         </div>
@@ -127,7 +133,16 @@ function Feed() {
                 })}
             </div>
           </div>
-
+          <div className="deletePost">
+            {profile?.id == post.uid && (
+              <button
+                className="deleteButton"
+                onClick={() => deletePost(post.id)}
+              >
+                {<DeleteIcon style={{ fontSize: `medium` }} />}
+              </button>
+            )}
+          </div>
           <div className="comment">
             <div className="commentTitle">
               <b
