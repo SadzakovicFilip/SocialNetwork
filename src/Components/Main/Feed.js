@@ -5,6 +5,8 @@ import { db } from "../firebase/firebase-config";
 import { PostsContext } from "../Context/context";
 import Navbar from "../navbar/Navbar";
 
+import { Link } from "react-router-dom";
+
 import "./feed.css";
 
 import FavoriteBorderSharpIcon from "@mui/icons-material/FavoriteBorderSharp";
@@ -93,7 +95,7 @@ function Feed() {
     let isLiked = post.likes.find((item) => profile?.id == item.id);
     return (
       <div className="completePost" key={key}>
-        <div className="profile">{post.profile}</div>
+        <div className="profile"><Link to={`/myprofile/${post.uid}`}>{post.profile}</Link></div>
         <div className="img" onDoubleClick={() => handleLike(post.id)}>
           <img src={post.url} alt="post" />{" "}
         </div>
