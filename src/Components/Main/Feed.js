@@ -1,9 +1,13 @@
 import React, { useContext, useState } from "react";
 
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc,deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase-config";
 import { PostsContext } from "../Context/context";
 import Navbar from "../navbar/Navbar";
+import { storage } from "../firebase/firebase-config";
+
+import { ref } from "firebase/storage";
+import { deleteObject} from "firebase/storage"
 
 import { Link } from "react-router-dom";
 
@@ -91,8 +95,12 @@ function Feed() {
     setAdd((prev) => prev + 1);
   };
 
-  const deletePost = () => {
-    console.log(`deletedPost`);
+  const deletePost = async(postID,imgID) => {
+    const imageRef = ref(storage, `images/${imgID}`)
+    deleteObject(imageRef)
+    const postDoc = doc(db,`posts`,postID)
+    deleteDoc(postDoc)
+    setAdd(prev=>prev+1)
   };
 
   const feed = posts.map((post, key) => {
@@ -134,14 +142,14 @@ function Feed() {
             </div>
           </div>
           <div className="deletePost">
-            {profile?.id == post.uid && (
-              <button
-                className="deleteButton"
-                onClick={() => deletePost(post.id)}
-              >
-                {<DeleteIcon style={{ fontSize: `medium` }} />}
-              </button>
-            )}
+          {profile?.id === post.uid && (
+                <button
+                  className="deleteButton"
+                  onClick={() => deletePost(post.id,post.imagesId)}
+                >
+                  {<DeleteIcon style={{ fontSize: `medium` }} />}
+                </button>
+              )}
           </div>
           <div className="comment">
             <div className="commentTitle">
