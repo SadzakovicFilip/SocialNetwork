@@ -102,11 +102,11 @@ function MyProfile() {
   };
   
   const deletePost = async(postID,imgID) => {
-    console.log(imgID)
     const imageRef = ref(storage, `images/${imgID}`)
     deleteObject(imageRef)
     const postDoc = doc(db,`posts`,postID)
     deleteDoc(postDoc)
+    setAdd(prev=>prev+1)
   };
 
   const myPosts = posts.map((post, key) => {
