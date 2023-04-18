@@ -22,7 +22,6 @@ import PickedProfile from "./Components/Main/PickedProfile";
 export const postCollectionRef = collection(db, `posts`);
 export const userCollectionRef = collection(db, `users`);
 
-
 function App() {
   const [posts, setPosts] = useState([]);
   const [add, setAdd] = useState(0);
@@ -43,11 +42,11 @@ function App() {
       setProfile(
         data.docs
           .map((doc) => ({ ...doc.data(), id: doc.id }))
-          .find((item) => item.id == currentUser?.uid)
+          .find((item) => item.id === currentUser?.uid)
       );
     };
     getAllUsers();
-  }, [currentUser]);
+  }, [currentUser, add]);
 
   const contextValue = { posts, setPosts, add, setAdd, profile };
 

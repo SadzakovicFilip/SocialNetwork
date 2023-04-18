@@ -2,14 +2,15 @@ import React from "react";
 import { useContext, useState } from "react";
 
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { ref } from "firebase/storage";
-import { deleteObject} from "firebase/storage"
-
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { deleteObject } from "firebase/storage";
 
 import { PostsContext } from "../Context/context";
 import { AuthContext } from "../Context/AuthContext";
 import { db } from "../firebase/firebase-config";
 import { storage } from "../firebase/firebase-config";
+
+import { useNavigate } from "react-router-dom";
 
 import Navbar from "../navbar/Navbar";
 
@@ -20,18 +21,22 @@ import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
-
+import { Avatar } from "@mui/material";
 
 function MyProfile() {
   const [commentar, setComment] = useState(``);
+  const [profilePic, setProfilePic] = useState(``);
+  const [profilePicUrl, setProfilePicUrl] = useState(``);
   const { currentUser } = useContext(AuthContext);
   const { posts, profile, setAdd } = useContext(PostsContext);
 
-  
+  const navigate = useNavigate();
 
   const handleLike = async (id) => {
     const singlePost = posts.find((item) => item.id === id);
-    const isLiked = singlePost.likes.find((item) => `${item.id}` === profile.id);
+    const isLiked = singlePost.likes.find(
+      (item) => `${item.id}` === profile.id
+    );
 
     if (!isLiked) {
       const postDoc = doc(db, "posts", id);
@@ -100,13 +105,33 @@ function MyProfile() {
     await updateDoc(postDoc, { comments: [...deleteComment] });
     setAdd((prev) => prev + 1);
   };
-  
-  const deletePost = async(postID,imgID) => {
-    const imageRef = ref(storage, `images/${imgID}`)
-    deleteObject(imageRef)
-    const postDoc = doc(db,`posts`,postID)
-    deleteDoc(postDoc)
-    setAdd(prev=>prev+1)
+
+  const deletePost = async (postID, imgID) => {
+    const imageRef = ref(storage, `images/${imgID}`);
+    deleteObject(imageRef);
+    const postDoc = doc(db, `posts`, postID);
+    deleteDoc(postDoc);
+    setAdd((prev) => prev + 1);
+  };
+
+  const profilePicPreview = (file) => {
+    if (file == null) return setProfilePic(null);
+    setProfilePicUrl(URL.createObjectURL(file));
+    setProfilePic(file);
+  };
+
+  const addProfilePic = async () => {
+    const avatarsRef = ref(storage, `avatars/${currentUser.uid}`);
+
+    await uploadBytes(avatarsRef, profilePic);
+    const url = await getDownloadURL(avatarsRef);
+
+    await updateDoc(doc(db, `users`, currentUser.uid), {
+      avatar: url,
+    });
+    setAdd((prev) => prev + 1);
+    alert(`You Have Changed your profile picture!`)
+    navigate("/feed")
   };
 
   const myPosts = posts.map((post, key) => {
@@ -114,7 +139,18 @@ function MyProfile() {
     return (
       post.uid === currentUser.uid && (
         <div className="completePost" key={key}>
-          <div className="profile">{post.profile}</div>
+          <div className="profile">
+            <div>
+              {
+                <Avatar
+                  src={profile.avatar}
+                  alt={post.profile}
+                  className="avatar"
+                />
+              }
+            </div>
+            <div>{post.profile}</div>
+          </div>
           <div className="img" onDoubleClick={() => handleLike(post.id)}>
             <img src={post.url} alt="post" />{" "}
           </div>
@@ -153,7 +189,7 @@ function MyProfile() {
               {profile?.id === post.uid && (
                 <button
                   className="deleteButton"
-                  onClick={() => deletePost(post.id,post.imagesId)}
+                  onClick={() => deletePost(post.id, post.imagesId)}
                 >
                   {<DeleteIcon style={{ fontSize: `medium` }} />}
                 </button>
@@ -224,6 +260,22 @@ function MyProfile() {
   return (
     <div className="myProfile">
       <Navbar />
+      <div>
+        {profilePicUrl && (
+          <div className="profilePicturePreview">
+            <img src={profilePicUrl} alt="profilePicPreview" />{" "}
+            <button onClick={addProfilePic}>add</button>
+          </div>
+        )}
+      </div>
+      <form className="addAProfilePicture">
+        <label htmlFor="profilePic"> add a profile picture +</label>
+        <input
+          id="profilePic"
+          type="file"
+          onChange={(e) => profilePicPreview(e.target.files[0])}
+        />
+      </form>
       <div>{myPosts}</div>
     </div>
   );

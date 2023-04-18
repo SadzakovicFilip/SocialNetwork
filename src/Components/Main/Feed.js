@@ -1,13 +1,13 @@
 import React, { useContext, useState } from "react";
 
-import { updateDoc, doc,deleteDoc } from "firebase/firestore";
+import { updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase-config";
 import { PostsContext } from "../Context/context";
 import Navbar from "../navbar/Navbar";
 import { storage } from "../firebase/firebase-config";
 
 import { ref } from "firebase/storage";
-import { deleteObject} from "firebase/storage"
+import { deleteObject } from "firebase/storage";
 
 import { Link } from "react-router-dom";
 
@@ -18,14 +18,17 @@ import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
+import { Avatar } from "@mui/material";
 
 function Feed() {
   const { posts, profile, setAdd } = useContext(PostsContext);
   const [commentar, setComment] = useState(``);
 
   const handleLike = async (id) => {
-    const singlePost = posts.find((item) => item.id == id);
-    const isLiked = singlePost.likes.find((item) => `${item.id}` == profile.id);
+    const singlePost = posts.find((item) => item.id === id);
+    const isLiked = singlePost.likes.find(
+      (item) => `${item.id}` === profile.id
+    );
 
     if (!isLiked) {
       const postDoc = doc(db, "posts", id);
@@ -50,7 +53,7 @@ function Feed() {
   };
 
   const handleLikeList = async (id) => {
-    const singlePost = posts.find((item) => item.id == id);
+    const singlePost = posts.find((item) => item.id === id);
     const postDoc = doc(db, "posts", id);
     await updateDoc(postDoc, {
       likeList: !singlePost.likeList,
@@ -60,7 +63,7 @@ function Feed() {
 
   const postComment = async (e, id) => {
     e.preventDefault();
-    const singlePost = posts.find((item) => item.id == id);
+    const singlePost = posts.find((item) => item.id === id);
     const postDoc = doc(db, "posts", id);
     await updateDoc(postDoc, {
       comments: [
@@ -79,7 +82,7 @@ function Feed() {
   };
 
   const handleCommentList = async (id) => {
-    const singlePost = posts.find((item) => item.id == id);
+    const singlePost = posts.find((item) => item.id === id);
     const postDoc = doc(db, "posts", id);
     await updateDoc(postDoc, {
       commentList: !singlePost.commentList,
@@ -88,27 +91,36 @@ function Feed() {
   };
 
   const deleteComment = async (pId, cId) => {
-    const singlePost = posts.find((item) => item.id == pId);
+    const singlePost = posts.find((item) => item.id === pId);
     const deleteComment = singlePost.comments.filter((item) => item.id !== cId);
     const postDoc = doc(db, "posts", pId);
     await updateDoc(postDoc, { comments: [...deleteComment] });
     setAdd((prev) => prev + 1);
   };
 
-  const deletePost = async(postID,imgID) => {
-    const imageRef = ref(storage, `images/${imgID}`)
-    deleteObject(imageRef)
-    const postDoc = doc(db,`posts`,postID)
-    deleteDoc(postDoc)
-    setAdd(prev=>prev+1)
+  const deletePost = async (postID, imgID) => {
+    const imageRef = ref(storage, `images/${imgID}`);
+    deleteObject(imageRef);
+    const postDoc = doc(db, `posts`, postID);
+    deleteDoc(postDoc);
+    setAdd((prev) => prev + 1);
   };
 
   const feed = posts.map((post, key) => {
-    let isLiked = post.likes.find((item) => profile?.id == item.id);
+    let isLiked = post.likes.find((item) => profile?.id === item.id);
     return (
       <div className="completePost" key={key}>
         <div className="profile">
-          <Link to={`/myprofile/${post.uid}`}>{post.profile}</Link>
+          <Link to={`/myprofile/${post.uid}`} className="profileLink">
+            {
+              <Avatar
+                alt={post.profile}
+                src={post.userAvatar}
+                className="avatar"
+              />
+            }
+            {post.profile}
+          </Link>
         </div>
         <div className="img" onDoubleClick={() => handleLike(post.id)}>
           <img src={post.url} alt="post" />{" "}
@@ -142,14 +154,14 @@ function Feed() {
             </div>
           </div>
           <div className="deletePost">
-          {profile?.id === post.uid && (
-                <button
-                  className="deleteButton"
-                  onClick={() => deletePost(post.id,post.imagesId)}
-                >
-                  {<DeleteIcon style={{ fontSize: `medium` }} />}
-                </button>
-              )}
+            {profile?.id === post.uid && (
+              <button
+                className="deleteButton"
+                onClick={() => deletePost(post.id, post.imagesId)}
+              >
+                {<DeleteIcon style={{ fontSize: `medium` }} />}
+              </button>
+            )}
           </div>
           <div className="comment">
             <div className="commentTitle">
@@ -176,7 +188,7 @@ function Feed() {
                       : {comment.comment}
                     </span>
 
-                    {profile?.id == comment.uid && (
+                    {profile?.id === comment.uid && (
                       <button
                         className="deleteButton"
                         onClick={() => deleteComment(post.id, comment.id)}

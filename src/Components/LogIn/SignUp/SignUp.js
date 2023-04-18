@@ -13,7 +13,7 @@ import { auth, db } from "../../firebase/firebase-config";
 
 function SignUp() {
   const [error, setError] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -35,6 +35,8 @@ function SignUp() {
         password: data.password,
         dateOfBirth: data.date,
         Timestamp: serverTimestamp(),
+        profile: `${data.firstName} ${data.lastName} `,
+        avatar : `https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg`
       });
     } catch (error) {
       return setError(error.message.slice(9, error.message.length));
@@ -42,7 +44,6 @@ function SignUp() {
     alert(`You Signed Up!`);
     navigate("/");
   };
-
 
   const navigate = useNavigate();
 
