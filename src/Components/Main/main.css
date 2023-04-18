@@ -61,10 +61,64 @@ button {
   padding: 20px;
   background-color: rgb(252, 216, 17);
 }
-#inputFile{
+#inputFile {
   display: none;
 }
-.labelInput{
+.labelInput {
   font-weight: 700;
   cursor: pointer;
+}
+#profilePic {
+  display: none;
+}
+label {
+  color: rgb(252, 216, 17);
+  font-weight: 700;
+  cursor: pointer;
+  height: 40px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.addAProfilePicture {
+  margin-top: 20px;
+  border: solid;
+  border-radius: 20px;
+  border-color: rgb(252, 216, 17);
+}
+.profilePicturePreview > img {
+  height: 200px;
+  width: 200px;
+  border-radius: 200px;
+  object-fit: cover;
+}
+.profilePicturePreview {
+  display: flex;
+  flex-direction: column;
+}
+.avatar {
+  margin-right: 16px;
+}
+.profile {
+  font-size: 25px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-weight: 700;
+  text-decoration: underline;
+  font-style: oblique;
+  margin: 20px 20px;
+  color: rgba(120, 7, 248, 0.925);
+  display: flex;
+  align-items: center;
+}
+.avatar {
+  margin-left: 20px;
+}
+.completePost {
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(252, 216, 17);
+  border-radius: 16px;
 }

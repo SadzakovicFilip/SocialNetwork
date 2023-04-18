@@ -18,12 +18,12 @@ import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
+import { Avatar } from "@mui/material";
 
 function PickedProfile() {
   const [commentar, setComment] = useState(``);
   const { posts, profile, setAdd } = useContext(PostsContext);
   const { profileID } = useParams();
-
 
   const handleLike = async (id) => {
     const singlePost = posts.find((item) => item.id === id);
@@ -104,7 +104,18 @@ function PickedProfile() {
     return (
       post.uid === profileID && (
         <div className="completePost" key={key}>
-          <div className="profile">{post.profile}</div>
+          <div className="profile">
+            <div>
+              {
+                <Avatar
+                  src={profile.avatar}
+                  alt={post.profile}
+                  className="avatar"
+                />
+              }
+            </div>
+            <div>{post.profile}</div>
+          </div>
           <div className="img" onDoubleClick={() => handleLike(post.id)}>
             <img src={post.url} alt="post" />{" "}
           </div>

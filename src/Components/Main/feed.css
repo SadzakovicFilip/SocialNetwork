@@ -34,10 +34,10 @@
   width: 380px;
   height: 458px;
   object-fit: contain;
-  background-color: rgb(252, 216, 17);
+  background-color: beige;
   border-radius: 20px;
   border: solid;
-  border-color: rgb(252, 216, 17);
+  border-color: beige;
 }
 .profile {
   font-size: 25px;
@@ -47,13 +47,24 @@
   font-style: oblique;
   margin-bottom: 15px;
   color: rgba(120, 7, 248, 0.925);
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+.profileLink {
+  display: flex;
+  align-items: center;
+  margin: 10px 10px;
+}
+.avatar {
+  margin-right: 16px;
 }
 .completePost {
   margin: 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(252, 216, 17);
+  background-color: beige;
   border-radius: 20px;
 }
 .description {

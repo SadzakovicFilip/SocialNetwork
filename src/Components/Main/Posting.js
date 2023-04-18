@@ -37,10 +37,10 @@ function Posting() {
 
   const handlePost = async (e) => {
     e.preventDefault();
-    if(fileState==false) return 
+    if (fileState === false) return;
 
     const date = new Date().toString();
-    const imgId = v4()
+    const imgId = v4();
     const imageRef = ref(storage, `images/${imgId}`);
 
     await uploadBytes(imageRef, fileState);
@@ -57,7 +57,8 @@ function Posting() {
       profile: `${profile.firstName} ${profile.lastName}`,
       likeList: false,
       commentList: false,
-      imagesId: imgId
+      imagesId: imgId,
+      userAvatar: profile.avatar,
     });
     setAdd((prev) => prev + 1);
     navigate(`/feed`);
@@ -71,7 +72,9 @@ function Posting() {
           {imgURL && <img src={imgURL} alt="preview" />}
         </div>
         <form onSubmit={handlePost}>
-            <label htmlFor="inputFile" className="labelInput"><PostAddSharpIcon/></label>
+          <label htmlFor="inputFile" className="labelInput">
+            <PostAddSharpIcon />
+          </label>
           <input
             id="inputFile"
             onChange={(e) => imgPreview(e.target.files[0])}
