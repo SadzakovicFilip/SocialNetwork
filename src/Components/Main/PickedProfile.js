@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext, useState } from "react";
 
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc,getDocs } from "firebase/firestore";
 
 import { useParams } from "react-router-dom";
 
@@ -20,10 +20,26 @@ import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
 import { Avatar } from "@mui/material";
 
+import { userCollectionRef } from "../../App";
+
 function PickedProfile() {
   const [commentar, setComment] = useState(``);
   const { posts, profile, setAdd } = useContext(PostsContext);
   const { profileID } = useParams();
+  const [pickedProfile, setPickedProfile] = useState(``)
+  
+  useEffect(()=>{
+    const fetchUser = async () => {
+      const data = await getDocs(userCollectionRef);
+      setPickedProfile(
+        data.docs
+          .map((doc) => ({ ...doc.data(), id: doc.id }))
+          .find((item) => item.id === profileID)
+      );
+    };
+    fetchUser()
+  },[])
+  console.log(pickedProfile)
 
   const handleLike = async (id) => {
     const singlePost = posts.find((item) => item.id === id);
@@ -101,6 +117,7 @@ function PickedProfile() {
 
   const profilePosts = posts.map((post, key) => {
     let isLiked = post.likes.find((item) => profile?.id === item.id);
+
     return (
       post.uid === profileID && (
         <div className="completePost" key={key}>
@@ -108,7 +125,7 @@ function PickedProfile() {
             <div>
               {
                 <Avatar
-                  src={profile.avatar}
+                  src={post.userAvatar}
                   alt={post.profile}
                   className="avatar"
                 />
@@ -214,10 +231,37 @@ function PickedProfile() {
   });
 
   return (
-    <div>
-      <Navbar />
-      <div className="myProfile">{profilePosts}</div>
+    <div className="myProfile">
+    <Navbar />
+    <hr></hr>
+    <div className="info">
+      <div className="profileImg">
+    <label htmlFor="profilePic"><img alt="profilePicture" src={pickedProfile?.avatar} /></label>
+      </div>
+      <div>
+        <ul>
+          <li>
+            Full Name : {pickedProfile?.lastName} {pickedProfile?.firstName}
+          </li>
+          <li>Born : {pickedProfile?.dateOfBirth}</li>
+          <li>Country : {pickedProfile?.country} </li>
+          <li>Education : {pickedProfile?.education}</li>
+          <li>
+            Telephone : <a href="tel:+38169757995"> {pickedProfile?.telephone}</a>
+          </li>
+          <li>
+            E-mail : <a href="mailto:sadza93@live.com"> {pickedProfile?.email}</a>
+          </li>
+        </ul>
+      </div>
     </div>
+    <hr></hr>
+
+
+ 
+    <div>{profilePosts}</div>
+    
+  </div>
   );
 }
 

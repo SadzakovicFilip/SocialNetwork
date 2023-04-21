@@ -31,6 +31,9 @@ function SignUp() {
       await setDoc(doc(db, `users`, res.user.uid), {
         firstName: data.firstName,
         lastName: data.lastName,
+        country:data.country,
+        education:data.education,
+        telephone:data.telephone,
         email: data.eMail,
         password: data.password,
         dateOfBirth: data.date,
@@ -76,6 +79,36 @@ function SignUp() {
             },
           })}
           placeholder={errors.lastName ? errors.lastName.message : `Last Name`}
+        />
+        <input
+          type="text"
+          {...register(`country`, {
+            required: {
+              value: true,
+              message: `Country is required !`,
+            },
+          })}
+          placeholder={errors.country ? errors.country.message : `Country`}
+        />
+        <input
+          type="text"
+          {...register(`education`, {
+            required: {
+              value: true,
+              message: `Education is required !`,
+            },
+          })}
+          placeholder={errors.education ? errors.education.message : `Education`}
+        />
+        <input
+          type="number"
+          {...register(`telephone`, {
+            required: {
+              value: true,
+              message: `Telephone is required !`,
+            },
+          })}
+          placeholder={errors.telephone ? errors.telephone.message : `Telephone`}
         />
         <input
           type="email"
