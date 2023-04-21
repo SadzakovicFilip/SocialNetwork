@@ -81,12 +81,7 @@ label {
   justify-content: center;
   align-items: center;
 }
-.addAProfilePicture {
-  margin-top: 20px;
-  border: solid;
-  border-radius: 20px;
-  border-color: rgb(252, 216, 17);
-}
+
 .profilePicturePreview > img {
   height: 200px;
   width: 200px;
@@ -121,4 +116,59 @@ label {
   align-items: center;
   background-color: rgb(252, 216, 17);
   border-radius: 16px;
+}
+.profileImg>label>img{
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  object-fit: cover;
+}
+.profileImg{
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  object-fit: cover;
+}
+.profileImg1>img{
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  object-fit: cover;
+}
+.profileImg1{
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  object-fit: cover;
+}
+.profileImg>label{
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  object-fit: cover;
+}
+.info{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 70%;
+  color:  white;
+}
+
+li{
+  list-style-type: none;
+  color: white;
+  font-weight: 700;
+}
+li>i{
+  color: wheat;
+}
+li>i>a{
+  color: wheat;
+}
+hr{
+  width: 70%;
+  color: rgb(252, 216, 17);
+  border-color: rgb(252, 216, 17);
+  background: rgb(252, 216, 17);;
 }

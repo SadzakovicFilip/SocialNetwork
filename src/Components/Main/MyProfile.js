@@ -115,12 +115,13 @@ function MyProfile() {
   };
 
   const profilePicPreview = (file) => {
-    if (file == null) return setProfilePic(null);
+    if (file == null) return setProfilePic(``);
     setProfilePicUrl(URL.createObjectURL(file));
     setProfilePic(file);
   };
 
   const addProfilePic = async () => {
+    if (profilePic === false) return;
     const avatarsRef = ref(storage, `avatars/${currentUser.uid}`);
 
     await uploadBytes(avatarsRef, profilePic);
@@ -130,8 +131,8 @@ function MyProfile() {
       avatar: url,
     });
     setAdd((prev) => prev + 1);
-    alert(`You Have Changed your profile picture!`)
-    navigate("/feed")
+    alert(`You Have Changed your profile picture!`);
+    navigate("/feed");
   };
 
   const myPosts = posts.map((post, key) => {
@@ -260,16 +261,40 @@ function MyProfile() {
   return (
     <div className="myProfile">
       <Navbar />
+      <hr></hr>
+      <div className="info">
+        <div className="profileImg">
+      <label htmlFor="profilePic"><img alt="profilePicture" src={profile?.avatar} /></label>
+        </div>
+        <div>
+          <ul>
+            <li>
+              Full Name : <i>{profile?.lastName} {profile?.firstName}</i>
+            </li>
+            <li>Born : <i>{profile?.dateOfBirth}</i></li>
+            <li>Country : <i>{profile?.country}</i> </li>
+            <li>Education : <i>{profile?.education}</i></li>
+            <li>
+              Telephone : <i><a href={`tel:${profile?.telephone}`}> {profile?.telephone}</a></i>
+            </li>
+            <li>
+              E-mail : <i><a href={`mailto:${profile?.email}`}> {profile?.email}</a></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr></hr>
+
       <div>
         {profilePicUrl && (
           <div className="profilePicturePreview">
             <img src={profilePicUrl} alt="profilePicPreview" />{" "}
-            <button onClick={addProfilePic}>add</button>
+            <button onClick={addProfilePic}>Change Profile Picture</button>
           </div>
         )}
       </div>
+
       <form className="addAProfilePicture">
-        <label htmlFor="profilePic"> add a profile picture +</label>
         <input
           id="profilePic"
           type="file"
@@ -277,6 +302,7 @@ function MyProfile() {
         />
       </form>
       <div>{myPosts}</div>
+      
     </div>
   );
 }
