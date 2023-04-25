@@ -34,19 +34,14 @@
   width: 380px;
   height: 458px;
   object-fit: contain;
-  background-color: beige;
   border-radius: 20px;
-  border: solid;
-  border-color: beige;
 }
 .profile {
   font-size: 25px;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   font-weight: 700;
-  text-decoration: underline;
-  font-style: oblique;
   margin-bottom: 15px;
-  color: rgba(120, 7, 248, 0.925);
+  text-decoration: none;
   display: flex;
   justify-content: flex-start;
   width: 100%;
@@ -55,6 +50,8 @@
   display: flex;
   align-items: center;
   margin: 10px 10px;
+  text-decoration: none;
+  color: rgb(25, 118, 210);
 }
 .avatar {
   margin-right: 16px;
@@ -64,14 +61,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: beige;
+
   border-radius: 20px;
 }
 .description {
   font-style: italic;
   margin-bottom: 5px;
   font-weight: 700;
-  color: rgba(119, 7, 248, 0.925);
 }
 .deleteIcon {
   background-color: transparent;

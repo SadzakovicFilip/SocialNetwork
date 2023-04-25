@@ -18,6 +18,10 @@ import { AuthContext } from "../Context/AuthContext";
 import PostAddSharpIcon from "@mui/icons-material/PostAddSharp";
 
 import "./main.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Container, CssBaseline, Box, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 function Posting() {
   const [postData, setPostData] = useState({ url: "", description: "" });
@@ -64,38 +68,112 @@ function Posting() {
     navigate(`/feed`);
   };
 
+  const theme = createTheme();
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Navbar />
-      <div className="post">
-        <div className="imgPreview">
-          {imgURL && <img src={imgURL} alt="preview" />}
-        </div>
-        <form onSubmit={handlePost}>
-          <label htmlFor="inputFile" className="labelInput">
-            <PostAddSharpIcon />
-          </label>
-          <input
-            id="inputFile"
-            onChange={(e) => imgPreview(e.target.files[0])}
-            placeholder="Image URL"
-            type="file"
-          />
-          <input
-            style={{ color: `black` }}
-            className="description"
-            onChange={(e) =>
-              setPostData((prev) => ({ ...prev, description: e.target.value }))
-            }
-            placeholder="Description"
-            type="text"
-          />
-          <div className="formButtons">
-            <button>POST</button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <Container
+        sx={{
+          display: `flex`,
+          flexDirection: `column`,
+          justifyContent: `center`,
+          alignItems: `center`,
+          marginTop: "10px",
+        }}
+        component="main"
+        maxWidth="xs"
+      >
+        <CssBaseline />
+        {!imgURL && (
+          <Typography
+            type="h2"
+            variant="h2"
+            color="primary.main"
+            marginTop="150px"
+          >
+            Post a Photo
+          </Typography>
+        )}
+        <Box
+          sx={{
+            justifyContent: `center`,
+            marginTop: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: `flex`,
+              flexDirection: `column`,
+              justifyContent: `center`,
+            }}
+          >
+            <Box>
+              {imgURL && (
+                <img
+                  width="400px"
+                  height="400px"
+                  style={{ objectFit: `contain` }}
+                  src={imgURL}
+                  alt="preview"
+                />
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: `flex`,
+                flexDirection: `column`,
+                justifyContent: "center",
+                alignItems: `center`,
+              }}
+              component="form"
+              onSubmit={handlePost}
+            >
+              <label htmlFor="inputFile">
+                <PostAddSharpIcon
+                  sx={{ color: `primary.main` }}
+                  fontSize="large"
+                />
+              </label>
+              <TextField
+                sx={{ display: `none` }}
+                id="inputFile"
+                onChange={(e) => imgPreview(e.target.files[0])}
+                placeholder="Image URL"
+                type="file"
+                name="inputFile"
+              />
+              {imgURL && (
+                <TextField
+                  style={{ color: `black` }}
+                  name="description"
+                  label="description"
+                  onChange={(e) =>
+                    setPostData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                  type="text"
+                />
+              )}
+              {imgURL && (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  POST
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
 

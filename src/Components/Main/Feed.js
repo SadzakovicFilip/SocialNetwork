@@ -18,7 +18,16 @@ import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
-import { Avatar } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  CardMedia
+} from "@mui/material";
 
 function Feed() {
   const { posts, profile, setAdd } = useContext(PostsContext);
@@ -109,8 +118,30 @@ function Feed() {
   const feed = posts.map((post, key) => {
     let isLiked = post.likes.find((item) => profile?.id === item.id);
     return (
-      <div className="completePost" key={key}>
-        <div className="profile">
+      <Grid item xs={12} sm={12} md={12} key={key}>
+      <Card
+        sx={{
+          display: "flex",
+          boxShadow:
+            "0px 2px 1px -1px rgba(25, 118, 210,0.4), 0px 1px 1px 0px rgba(25, 118, 210,0.24), 0px 1px 3px 0px rgba(25, 118, 210,0.22)",
+          justifyContent: "center",
+          height: "500px",
+          height: "auto",
+          margin:"20px"
+        }}
+      >
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "top",
+            alignItems: "center",
+          }}
+      
+          height="700px"
+          key={key}
+        >
+           <Box className="profile">
           <Link to={`/myprofile/${post.uid}`} className="profileLink">
             {
               <Avatar
@@ -119,108 +150,135 @@ function Feed() {
                 className="avatar"
               />
             }
+            <Typography variant="h6" >
             {post.profile}
+            </Typography>
           </Link>
-        </div>
-        <div className="img" onDoubleClick={() => handleLike(post.id)}>
-          <img src={post.url} alt="post" />{" "}
-        </div>
-        <div className="description">
-          <p>{post.description}</p>
-        </div>
-        <div className="commentsAndLikes">
-          <div className="completeLike">
-            <div className="likeDiv">
-              <div className="likeNumb" onClick={() => handleLikeList(post.id)}>
-                <b> {post.likes.length} </b>
-              </div>
-              <div className="likes" onClick={() => handleLike(post.id)}>
-                {isLiked ? (
-                  <FavoriteSharpIcon style={{ color: `red` }} />
-                ) : (
-                  <FavoriteBorderSharpIcon />
-                )}
-              </div>
-            </div>
-            <div>
-              {post.likeList &&
-                post.likes.map((item, key) => {
+        </Box>
+          <Card
+            className="img"
+            sx={{ boxShadow: "none" }}
+            onDoubleClick={() => handleLike(post.id)}
+          >
+            <CardMedia
+              component="img"
+              src={post.url}
+              alt="post"
+              height="400px"
+            />{" "}
+          </Card>
+          <Box sx={{ textAlign: "center", margin: "10px 0" }}>
+          <Typography variant="h6" marginBottom="40px" marginTop="7px" color="primary" gutterBottom height="10px">{post.description}</Typography>
+          </Box>
+          <Box className="commentsAndLikes">
+            <Box className="completeLike">
+              <Box className="likeDiv">
+                <Box
+                  className="likeNumb"
+                  onClick={() => handleLikeList(post.id)}
+                >
+                  <Typography variant="body1" color="primary">
+                    {" "}
+                    {post.likes.length}{" "}
+                  </Typography>
+                </Box>
+                <Box className="likes" onClick={() => handleLike(post.id)}>
+                  {isLiked ? (
+                    <FavoriteSharpIcon style={{ color: `red` }} />
+                  ) : (
+                    <FavoriteBorderSharpIcon color="primary" />
+                  )}
+                </Box>
+              </Box>
+              <Box>
+                {post.likeList &&
+                  post.likes.map((item, key) => {
+                    return (
+                      <Box className="listOfLikes" key={key}>
+                        {item.firstName} {item.lastName}
+                      </Box>
+                    );
+                  })}
+              </Box>
+            </Box>
+            <Box className="deletePost">
+              {profile?.id === post.uid && (
+                <Button
+                  className="deleteButton"
+                  onClick={() => deletePost(post.id, post.imagesId)}
+                >
+                  {<DeleteIcon style={{ fontSize: `medium` }} />}
+                </Button>
+              )}
+            </Box>
+
+            <Box className="comment">
+              <Box className="commentTitle">
+                <b
+                  style={{ cursor: `pointer` }}
+                  onClick={() => handleCommentList(post.id)}
+                >
+                  <CommentIcon color="primary" />
+                </b>
+                <Box className="numbOfComments">
+                  <Typography variant="body1" color="primary">
+                    {post.comments.length}
+                  </Typography>
+                </Box>
+              </Box>
+              {post.commentList &&
+                post.comments.map((comment, key) => {
                   return (
-                    <div className="listOfLikes" key={key}>
-                      {item.firstName} {item.lastName}
-                    </div>
+                    <Box className="singleComment" key={key}>
+                      <span>
+                        <i>
+                          {comment.firstName}
+                          {` `}
+                          {comment.lastName}
+                        </i>{" "}
+                        : {comment.comment}
+                      </span>
+
+                      {profile?.id === comment.uid && (
+                        <Button
+                          
+                          onClick={() => deleteComment(post.id, comment.id)}
+                        >
+                          {<DeleteIcon color="primary" style={{ fontSize: `medium`, }}  />}
+                        </Button>
+                      )}
+                    </Box>
                   );
                 })}
-            </div>
-          </div>
-          <div className="deletePost">
-            {profile?.id === post.uid && (
-              <button
-                className="deleteButton"
-                onClick={() => deletePost(post.id, post.imagesId)}
-              >
-                {<DeleteIcon style={{ fontSize: `medium` }} />}
-              </button>
-            )}
-          </div>
-          <div className="comment">
-            <div className="commentTitle">
-              <b
-                style={{ cursor: `pointer` }}
-                onClick={() => handleCommentList(post.id)}
-              >
-                <CommentIcon />
-              </b>
-              <div className="numbOfComments">
-                <b>{post.comments.length}</b>
-              </div>
-            </div>
-            {post.commentList &&
-              post.comments.map((comment, key) => {
-                return (
-                  <div className="singleComment" key={key}>
-                    <span>
-                      <i>
-                        {comment.firstName}
-                        {` `}
-                        {comment.lastName}
-                      </i>{" "}
-                      : {comment.comment}
-                    </span>
 
-                    {profile?.id === comment.uid && (
-                      <button
-                        className="deleteButton"
-                        onClick={() => deleteComment(post.id, comment.id)}
-                      >
-                        {<DeleteIcon style={{ fontSize: `medium` }} />}
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-
-            {post.commentList && (
-              <form
-                className="inputForm"
-                onSubmit={(e) => {
-                  postComment(e, post.id);
-                }}
-              >
-                <input
-                  placeholder="write a comment..."
-                  style={{ border: "none" }}
-                  onChange={(e) => setComment(e.target.value)}
-                  value={commentar}
-                />
-                <button>
-                  {<AddCommentIcon style={{ fontSize: `medium` }} />}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </div>
+              {post.commentList && (
+                <form
+                  className="inputForm"
+                  onSubmit={(e) => {
+                    postComment(e, post.id);
+                  }}
+                >
+                  <input
+                    placeholder="write a comment..."
+                    style={{ border: "none" }}
+                    onChange={(e) => setComment(e.target.value)}
+                    value={commentar}
+                  />
+                  <Button type="submit">
+                    {
+                      <AddCommentIcon
+                        style={{ fontSize: `medium` }}
+                        color="primary"
+                      />
+                    }
+                  </Button>
+                </form>
+              )}
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
+    </Grid>
     );
   });
 
