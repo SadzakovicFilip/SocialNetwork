@@ -1,9 +1,4 @@
 .App{
-  display: flex;
-  justify-content: center;
+  width: 100%;
   align-items: center;
-  background: rgba(120, 7, 248, 0.582);
-}
-.body{
-  background-color: blue;
 }

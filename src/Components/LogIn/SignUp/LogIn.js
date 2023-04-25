@@ -1,80 +1,116 @@
-import React from "react";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import { useContext, useState } from "react";
-
-import { useForm } from "react-hook-form";
-
-import "./logIn.css";
 
 import { useNavigate } from "react-router-dom";
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from '../../Context/AuthContext';
 
-function LogIn() {
-  const [error, setError] = useState(false);
-  const { dispatch } = useContext(AuthContext);
+const theme = createTheme();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+export default function LogIn2() {
+    const [error, setError] = useState(false);
+    const { dispatch } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+  
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, data.eMail, data.password)
+    signInWithEmailAndPassword(auth, data.get(`email`), data.get(`password`))
       .then((userCredential) => {
         const user = userCredential.user;
         dispatch({ type: `LOGIN`, payload: user });
         navigate("/feed");
       })
       .catch((error) => {
-        setError(error.message);
+        setError(error.message.slice(9, error.message.length));
       });
   };
 
-  const navigate = useNavigate();
-
-  const handleSignUp = (e) => {
-    e.preventDefault();
-    navigate("/signUp");
-  };
   return (
-    <div className="logInDiv">
-      <form onSubmit={handleSubmit(onSubmit)} className="logIn">
-        <input
-          type="email"
-          {...register(`eMail`, {
-            required: {
-              value: true,
-              message: `E-mail is required !`,
-            },
-          })}
-          placeholder={errors.eMail ? errors.eMail.message : `E-mail`}
-        />
-        <input
-          type="password"
-          {...register(`password`, {
-            required: {
-              value: true,
-              message: `Password is required !`,
-            },
-          })}
-          placeholder={errors.password ? errors.password.message : `Password`}
-        />
-        <div className="buttons">
-          <button>Log In</button>
-          <button onClick={handleSignUp}>SignUp</button>
-        </div>
-        {error && (
-          <span style={{ color: `white`, marginTop: `10px`, fontWeight: "700" }}>
-            {error.slice(9, error.length)}
-          </span>
-        )}
-      </form>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+                      {error && (
+                <Grid
+                  item
+                  xs={12}
+                  color="red"
+                  container
+                  justifyContent="center"
+                >
+                  {error}
+                </Grid>
+              )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container justifyContent="flex-end">
+            
+              <Grid item>
+                <Link href="/signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
-
-export default LogIn;
