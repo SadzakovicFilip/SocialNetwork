@@ -19,7 +19,14 @@ import PostAddSharpIcon from "@mui/icons-material/PostAddSharp";
 
 import "./main.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Container, CssBaseline, Box, TextField } from "@mui/material";
+import {
+  Container,
+  CssBaseline,
+  Box,
+  TextField,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
@@ -27,6 +34,7 @@ function Posting() {
   const [postData, setPostData] = useState({ url: "", description: "" });
   const [fileState, setFileState] = useState(``);
   const [imgURL, setImgURL] = useState(``);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const { setAdd, profile } = useContext(PostsContext);
   const { currentUser } = useContext(AuthContext);
@@ -65,7 +73,12 @@ function Posting() {
       userAvatar: profile.avatar,
     });
     setAdd((prev) => prev + 1);
-    navigate(`/feed`);
+    setOpenSnackbar(true);
+  };
+
+  const handleClose = () => {
+    setOpenSnackbar(false);
+    navigate("/feed");
   };
 
   const theme = createTheme();
@@ -173,6 +186,20 @@ function Posting() {
           </Box>
         </Box>
       </Container>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert variant="filled" severity="success">
+          <Typography variant="h6">
+            {" "}
+            You Have Successfully Posted a Photo!
+          </Typography>
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

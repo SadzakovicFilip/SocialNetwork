@@ -165,6 +165,7 @@ function Feed() {
               src={post.url}
               alt="post"
               height="400px"
+              loading="lazy"
             />{" "}
           </Card>
           <Box sx={{ textAlign: "center", margin: "10px 0" }}>
@@ -285,7 +286,7 @@ function Feed() {
   return (
     <div>
       <Navbar />
-      <div className="feed">{feed}</div>
+      <div  className="feed">{feed}</div>
       <Navbar className="bottomNav" />
     </div>
   );

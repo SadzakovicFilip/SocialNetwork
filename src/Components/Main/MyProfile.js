@@ -21,13 +21,25 @@ import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import CommentIcon from "@mui/icons-material/Comment";
-import { Box, Card, CardContent, Grid, Button, CardMedia, Typography } from "@mui/material";
-
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  CardMedia,
+  Typography,
+  Tooltip,
+  Snackbar,
+  Alert
+} from "@mui/material";
 
 function MyProfile() {
   const [commentar, setComment] = useState(``);
   const [profilePic, setProfilePic] = useState(``);
   const [profilePicUrl, setProfilePicUrl] = useState(``);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const { currentUser } = useContext(AuthContext);
   const { posts, profile, setAdd } = useContext(PostsContext);
 
@@ -132,8 +144,14 @@ function MyProfile() {
       avatar: url,
     });
     setAdd((prev) => prev + 1);
-    alert(`You Have Changed your profile picture!`);
-    navigate("/feed");
+    setOpenSnackbar(true)
+   
+  };
+
+  const handleClose = () => {
+    setOpenSnackbar(false);
+    setProfilePicUrl('')
+    // navigate("/feed");
   };
 
   const myPosts = posts.map((post, key) => {
@@ -148,7 +166,6 @@ function MyProfile() {
                 "0px 2px 1px -1px rgba(25, 118, 210,0.4), 0px 1px 1px 0px rgba(25, 118, 210,0.24), 0px 1px 3px 0px rgba(25, 118, 210,0.22)",
               justifyContent: "center",
               height: "500px",
-              height: "auto",
             }}
           >
             <CardContent
@@ -158,7 +175,6 @@ function MyProfile() {
                 justifyContent: "top",
                 alignItems: "center",
               }}
-          
               height="700px"
               key={key}
             >
@@ -175,7 +191,16 @@ function MyProfile() {
                 />{" "}
               </Card>
               <Box sx={{ textAlign: "center", margin: "10px 0" }}>
-              <Typography variant="h6" marginBottom="40px" marginTop="7px" color="primary" gutterBottom height="10px">{post.description}</Typography>
+                <Typography
+                  variant="h6"
+                  marginBottom="40px"
+                  marginTop="7px"
+                  color="primary"
+                  gutterBottom
+                  height="10px"
+                >
+                  {post.description}
+                </Typography>
               </Box>
               <Box className="commentsAndLikes">
                 <Box className="completeLike">
@@ -271,7 +296,7 @@ function MyProfile() {
                         onChange={(e) => setComment(e.target.value)}
                         value={commentar}
                       />
-                      <Button  type="submit">
+                      <Button type="submit">
                         {
                           <AddCommentIcon
                             style={{ fontSize: `medium` }}
@@ -294,14 +319,21 @@ function MyProfile() {
     <div>
       <Navbar />
 
-     <Box marginTop="20px" justifyContent="center" display="flex">
-        <Card sx={{boxShadow:"0px 2px 1px -1px rgba(25, 118, 210,0.3), 0px 1px 1px 0px rgba(25, 118, 210,0.24), 0px 1px 3px 0px rgba(25, 118, 210,0.22)"}}>
+      <Box marginTop="20px" justifyContent="center" display="flex">
+        <Card
+          sx={{
+            boxShadow:
+              "0px 2px 1px -1px rgba(25, 118, 210,0.3), 0px 1px 1px 0px rgba(25, 118, 210,0.24), 0px 1px 3px 0px rgba(25, 118, 210,0.22)",
+          }}
+        >
           <CardContent sx={{ display: "flex", justifyContent: "center" }}>
             <Box className="info">
               <Box className="profileImg">
-                <label htmlFor="profilePic">
-                  <img alt="profilePicture" src={profile?.avatar} />
-                </label>
+                <Tooltip title="click to change picture" arrow>
+                  <label htmlFor="profilePic">
+                    <img alt="profilePicture" src={profile?.avatar} />
+                  </label>
+                </Tooltip>
               </Box>
               <Box>
                 <ul>
@@ -428,10 +460,31 @@ function MyProfile() {
           onChange={(e) => profilePicPreview(e.target.files[0])}
         />
       </form>
-      <Typography variant="h3" color="primary" marginTop="50px" textAlign="center" gutterBottom>{`${profile?.firstName}s POSTS`}</Typography>
+      <Typography
+        variant="h3"
+        color="primary"
+        marginTop="50px"
+        textAlign="center"
+        gutterBottom
+      >{`${profile?.firstName}s POSTS`}</Typography>
       <Grid container spacing={3} padding="10px">
         {myPosts}
       </Grid>
+      
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert variant="filled" severity="success">
+          <Typography variant="h6">
+            {" "}
+            You Have Successfully Changed a Profile Photo!
+          </Typography>
+        </Alert>
+      </Snackbar>
+
     </div>
   );
 }

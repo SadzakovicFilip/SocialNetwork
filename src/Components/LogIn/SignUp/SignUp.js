@@ -19,19 +19,21 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, CircularProgress } from "@mui/material";
 
 const theme = createTheme();
 
 export default function SignUp2() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
+  const [loading,setLoading]=useState(false)
 
 
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true)
     const data = new FormData(event.currentTarget);
     try {
       const res = await createUserWithEmailAndPassword(
@@ -52,9 +54,11 @@ export default function SignUp2() {
         profile: `${data.get(`firstName`)} ${data.get(`lastName`)} `,
         avatar: `https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg`,
       });
+      setLoading(false)
       setOpen(true);
     } catch (error) {
-      return setError(error.message.slice(9, error.message.length));
+        setLoading(false)
+        setError(error.message.slice(9, error.message.length));
     }
   };
 
@@ -169,7 +173,20 @@ export default function SignUp2() {
                   container
                   justifyContent="center"
                 >
+                  <Alert severity="error">
                   {error}
+                  </Alert>
+                </Grid>
+              )}
+              {loading && (
+                <Grid
+                  item
+                  xs={12}
+                  color="red"
+                  container
+                  justifyContent="center"
+                >
+                  <CircularProgress color="primary" />
                 </Grid>
               )}
             </Grid>
@@ -196,7 +213,7 @@ export default function SignUp2() {
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
               
             >
-              <Alert severity="success"><Typography variant="h6"> You Have Successfully Signed Up!</Typography></Alert>
+              <Alert variant="filled" severity="success"><Typography variant="h6"> You Have Successfully Signed Up!</Typography></Alert>
             </Snackbar>
           </Box>
         </Box>

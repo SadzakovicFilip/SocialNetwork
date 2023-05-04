@@ -16,7 +16,6 @@ import SignUp from "./Components/LogIn/SignUp/SignUp";
 import Posting from "./Components/Main/Posting";
 import Feed from "./Components/Main/Feed";
 import MyProfile from "./Components/Main/MyProfile";
-import SignOut from "./Components/Main/signOut";
 import PickedProfile from "./Components/Main/PickedProfile";
 
 
@@ -89,14 +88,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <PickedProfile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/signOut"
-                element={
-                  <ProtectedRoute>
-                    <SignOut />
                   </ProtectedRoute>
                 }
               />
